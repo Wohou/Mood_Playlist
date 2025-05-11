@@ -1,0 +1,205 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: 240 5.9% 10%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 240 5.9% 10%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 240 5.9% 10%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 240 4.9% 83.9%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Update the sortable-item class to ensure proper drag movement */
+.sortable-item {
+  touch-action: manipulation; /* Allow touch scrolling but handle drag properly */
+  user-select: none; /* Prevents text selection during drag */
+  position: relative; /* For positioning drop indicators */
+  margin-bottom: 2px; /* Space for drop indicator */
+  will-change: transform; /* Optimize for animations */
+}
+
+/* Improve the drag handle visibility */
+.drag-handle {
+  cursor: grab;
+  touch-action: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+  position: relative; /* Ensure proper stacking */
+  z-index: 2; /* Higher than surrounding elements */
+}
+
+.drag-handle:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.dark .drag-handle:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.dark .drag-handle:active {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Update the sortable-item-dragging class for better visual feedback */
+.sortable-item-dragging {
+  z-index: 9999 !important; /* Ensure highest z-index */
+  pointer-events: none !important; /* Prevent pointer events */
+  transform-origin: center center;
+  width: calc(100% - 20px); /* Ensure proper width */
+  max-width: 100%; /* Prevent overflow */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3) !important; /* Enhanced shadow */
+  cursor: grabbing !important; /* Show grabbing cursor */
+}
+
+/* Add a new class for the body during drag operations */
+body.dragging-active * {
+  cursor: grabbing !important; /* Show grabbing cursor everywhere during drag */
+}
+
+/* Prevent scrolling during drag operations */
+body.dragging-active {
+  overflow: hidden;
+  touch-action: none;
+}
+
+/* Drop indicator styles */
+.drop-indicator {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: #8b5cf6;
+  border-radius: 1px;
+  animation: pulse-opacity 1.5s infinite;
+}
+
+.drop-indicator-top {
+  top: 0;
+}
+
+.drop-indicator-bottom {
+  bottom: 0;
+}
+
+@keyframes pulse-opacity {
+  0%,
+  100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Prevent text selection during drag operations */
+.no-select {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
+}
+
+/* Add these styles for sections */
+.section-header {
+  position: relative;
+  z-index: 2;
+  transition: background-color 0.2s ease;
+}
+
+.section-header:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.dark .section-header:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.section-content {
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+  overflow: hidden;
+}
+
+.section-content.collapsed {
+  max-height: 0;
+  opacity: 0;
+}
+
+.section-content.expanded {
+  max-height: 1000px;
+  opacity: 1;
+}
+
+.section-drag-handle {
+  cursor: grab;
+  touch-action: none;
+}
+
+.section-drag-handle:active {
+  cursor: grabbing;
+}
+
+/* Update the sortable-item class to work with sections */
+.sortable-item.in-section {
+  margin-left: 1rem;
+}
